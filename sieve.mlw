@@ -12,6 +12,12 @@ module Sito
   
   lemma lower_fact : forall m i : int. 2 <= i < m < i * i -> divides i m -> exists d : int. 2 <= d < i /\ divides d m
   
+  let lemma ineq (i : int) (k : int) 
+  requires {k = i * i}
+  requires {i >= 2}
+  ensures {k > i}
+  = ()
+  
   (* implement Eratosthenes sieve *)
   let sito (n : int) :  array bool =
   requires { n >=2 }
@@ -26,7 +32,8 @@ module Sito
     label B in
     if a[i] then begin
       let ref k = i * i in
-        assert {2 <= i /\ k > i};
+        ineq i k;
+        assert {k > i};
         let ghost ref j = i in
         while k <= n do
           invariant {2 <= i}
